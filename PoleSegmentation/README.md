@@ -1,4 +1,5 @@
-# GeneralSegmentation
+
+# 2023 Zhongqi Miao
 
 ## Test data download
 1) Open `supp/data_download.py`, change the root directory where you want to save the data to.
