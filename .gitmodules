@@ -1,0 +1,3 @@
+[submodule "Chapter1"]
+	path = Chapter1
+	url = https://github.com/zhmiao/GeneralSegmentation.git
