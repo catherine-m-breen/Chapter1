@@ -2,6 +2,7 @@ import os
 import json
 import numpy as np
 from PIL import Image
+import pandas as pd ## Catherine edit
 
 from torch.utils.data import Dataset, DataLoader
 import pytorch_lightning as pl
@@ -45,15 +46,18 @@ class SNOWPOLE_DS(Dataset):
         mask_dir = os.path.join(rootdir, 'SegmentationClass')
 
         ####### split #########
-        splits_dir = os.path.join(rootdir, 'ImageSets/Segmentation')
-        split_f = os.path.join(splits_dir, '{}.txt'.format(dset))
+        splits_dir = os.path.join(rootdir, 'ImageSets')
+        df_data = pd.read_csv(os.path.join(splits_dir,'snowPoles_resized_labels_clean.csv'))
+        training_samples = df_data.sample(frac=0.9, random_state=100) ## same shuffle everytime
 
-        with open(os.path.join(split_f), "r") as f:
-            file_names = [x.strip() for x in f.readlines()]
-
+        if dset == 'train':
+            file_names = training_samples 
         
+        if dset == 'val':
+            file_names = df_data[~df_data.index.isin(training_samples.index)]
         #######################
         
+        IPython.embed()
         self.images = [os.path.join(image_dir, '{}.jpg'.format(x)) for x in file_names]
         self.masks = [os.path.join(mask_dir, '{}.png'.format(x)) for x in file_names]
         assert (len(self.images) == len(self.masks))
