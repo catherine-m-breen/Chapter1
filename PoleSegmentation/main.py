@@ -63,7 +63,7 @@ def main(
     dataset = datasets.__dict__[conf.dataset_name](conf=conf)
     learner = algorithms.__dict__[conf.algorithm](conf=conf)
 
-    IPython.embed() 
+    #IPython.embed() 
     ## then run: a, b = dataset.dset_tr.__getitem__(10) to inspect a target 
     ###############
     # Load logger #

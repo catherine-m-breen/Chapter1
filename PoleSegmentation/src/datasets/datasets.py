@@ -91,7 +91,7 @@ class SNOWPOLES(pl.LightningDataModule):
         print("Loading data...")
         self.dset_tr = SNOWPOLE_DS(rootdir=self.conf.dataset_root,
                               dset='train',
-                              transforms=data_transforms['train'])
+                              transforms=data_transforms['train']) # inspect images without the transforms
 
         self.dset_te = SNOWPOLE_DS(rootdir=self.conf.dataset_root,
                               dset='val',
