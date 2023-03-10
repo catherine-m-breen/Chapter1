@@ -6,7 +6,8 @@ All code was adapted from https://github.com/zhmiao/GeneralSegmentation in order
 3) an image list, including file names, is saved in a csv in a subfolder called "ImageSets". This is used to create the train/test splits
 
 ## Example images 
-image: https://github.com/catherine-m-breen/Chapter1/blob/main/example_imgs/W8C_WSCT0134.JPG
+image: 
+![image](https://github.com/catherine-m-breen/Chapter1/blob/main/example_imgs/W8C_WSCT0134.JPG)
 mask:  
 
 
