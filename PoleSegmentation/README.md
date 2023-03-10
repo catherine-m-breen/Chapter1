@@ -5,6 +5,11 @@ All code was adapted from https://github.com/zhmiao/GeneralSegmentation in order
 2) annotations (masked images) are saved in a subfolder from the root folder called "SegmentationClass"
 3) an image list, including file names, is saved in a csv in a subfolder called "ImageSets". This is used to create the train/test splits
 
+## Example images 
+image: https://github.com/catherine-m-breen/Chapter1/blob/main/example_imgs/W8C_WSCT0134.JPG
+mask:  
+
+
 ## Training and evaluation
 1) Before training on GPU, change the dataset root in the configuration files in `config` folder. 
     - Please also update the comet logger, and strategy function
