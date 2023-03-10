@@ -12,14 +12,14 @@ from pytorch_lightning.strategies.ddp import DDPStrategy
 
 from src import algorithms # cat edit, removed pi from here
 from src import datasets
-
+import IPython ## cat edit, added IPython for debugging
 
 app = typer.Typer(pretty_exceptions_show_locals=False)
 
 @app.command()
 def main(
          config:str='./configs/snowpole_plain_030923.yaml',
-         project:str='BEANS',  
+         project:str='SNOWPOLES_TEST',  
          gpus:str='0', 
          logger_type:str='tensorboard',
          evaluate:str=None,
@@ -32,7 +32,9 @@ def main(
     ############
     # Set gpus #
     ############
-    gpus = gpus if torch.cuda.is_available() else None
+    #IPython.embed()
+    gpus = gpus if torch.cuda.is_available() else '0' ## cat edit: changed from None, because it needed to be an integer
+    #if gpus != None: ## cat edit, so it can run locally
     gpus = [int(i) for i in gpus.split(',')]
 
     #############################
@@ -81,9 +83,9 @@ def main(
         )
     elif logger_type == 'comet':
         logger = CometLogger(
-            api_key=os.environ.get('COMET_API_KEY'),
+            api_key= "crD0w5pAk59gNUJ88yfNuMo5F", ## os.environ.get('COMET_API_KEY'), ## ask Miao where to store this 
             save_dir='./{}/{}'.format(log_folder, conf.algorithm),
-            project_name=project,  # Optional
+            project_name= "snowpole-segmentation", #project,  # Optional
             experiment_name='{}_{}_{}'.format(conf.algorithm, conf.conf_id, session),
         )
 
@@ -103,6 +105,7 @@ def main(
     #################
     trainer = pl.Trainer(
         max_steps=conf.num_iters,
+        accelerator= 'cpu', ## cat edit, for debugging purposes on local machine only 
         check_val_every_n_epoch=1, 
         log_every_n_steps = conf.log_interval, 
         gpus=gpus,

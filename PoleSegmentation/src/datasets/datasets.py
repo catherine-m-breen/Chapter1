@@ -52,15 +52,16 @@ class SNOWPOLE_DS(Dataset):
         training_samples = df_data.sample(frac=0.9, random_state=100) ## same shuffle everytime
 
         if dset == 'train':
-            file_names = training_samples 
+            file_names = training_samples['filename'] 
         
         if dset == 'val':
-            file_names = df_data[~df_data.index.isin(training_samples.index)]
+            file_names = df_data[~df_data.index.isin(training_samples.index)]['filename']
         #######################
-        
-        IPython.embed()
-        self.images = [os.path.join(image_dir, '{}.jpg'.format(x)) for x in file_names]
-        self.masks = [os.path.join(mask_dir, '{}.png'.format(x)) for x in file_names]
+
+        ## cat edits #1 took out jpg, because my files all have .JPG extensions
+        ## cat edit #2 added mask_ at beginning, because my segmented images have that naming system 
+        self.images = [os.path.join(image_dir, '{}'.format(x)) for x in file_names] 
+        self.masks = [os.path.join(mask_dir, 'mask_{}'.format(x)) for x in file_names]
         assert (len(self.images) == len(self.masks))
 
     def __getitem__(self, index):
