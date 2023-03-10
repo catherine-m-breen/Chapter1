@@ -71,9 +71,11 @@ class SNOWPOLE_DS(Dataset):
     def __getitem__(self, index):
         img = Image.open(self.images[index]).convert('RGB')
         target = Image.open(self.masks[index])
+        
         if self.transforms is not None:
             img, target = self.transforms(img, target)
 
+        #print('target dimensions' , target.shape)
         return img, target
 
     def __len__(self):

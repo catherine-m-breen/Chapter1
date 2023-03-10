@@ -10,8 +10,8 @@ parallel: 0
 dataset_root: /Users/catherinebreen/Documents/Chapter 1/segmentationModel/ ## update path when get on GPU
 dataset_name: SNOWPOLES
 num_classes: 2 #
-batch_size: 1 # will update with GPU
-num_workers: 1 #64
+batch_size: 2 # will update with GPU
+num_workers: 2 #64
 
 # model
 model_name: DeepLabV3_ResNet50
