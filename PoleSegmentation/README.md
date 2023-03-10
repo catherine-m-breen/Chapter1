@@ -1,4 +1,4 @@
-All code was adapted from https://github.com/zhmiao/GeneralSegmentation for segmenting snow poles from camera trap images for snow depth measurement. Please visit Zhongqi Miao's github page for information on model development. 
+All code was adapted from https://github.com/zhmiao/GeneralSegmentation in order to segment snow poles from camera trap images for snow depth measurement. Please visit Zhongqi Miao's github page for information on model development. 
 
 ## data structure information
 1) original images are saved in a subfolder from the root folder called "JPEGImages"
