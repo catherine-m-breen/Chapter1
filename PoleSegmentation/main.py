@@ -105,13 +105,14 @@ def main(
     #################
     trainer = pl.Trainer(
         max_steps=conf.num_iters,
-        accelerator= 'cpu', ## cat edit, for debugging purposes on local machine only 
+        #accelerator= 'gpu', devices=[0], ## cat edit, for debugging purposes on local machine only 
         check_val_every_n_epoch=1, 
         log_every_n_steps = conf.log_interval, 
-        gpus=gpus,
+        #gpus=gpus,
         logger=None if evaluate is not None else logger,
         callbacks=[lr_monitor, checkpoint_callback],
-        strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp',
+        #strategy="ddp", accelerator="cpu", devices=3,
+        #strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp', #'dp',
         num_sanity_val_steps=0,
         profiler='simple',
         enable_progress_bar=True,

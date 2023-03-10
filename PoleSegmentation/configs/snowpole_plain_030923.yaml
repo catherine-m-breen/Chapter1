@@ -11,7 +11,7 @@ dataset_root: /Users/catherinebreen/Documents/Chapter 1/segmentationModel/ ## up
 dataset_name: SNOWPOLES
 num_classes: 2 #
 batch_size: 1 # will update with GPU
-num_workers: 64
+num_workers: 1 #64
 
 # model
 model_name: DeepLabV3_ResNet50

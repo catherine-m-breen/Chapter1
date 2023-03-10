@@ -9,6 +9,7 @@ All code was adapted from https://github.com/zhmiao/GeneralSegmentation in order
 1) Before training on GPU, change the dataset root in the configuration files in `config` folder. 
     - Please also update the comet logger, and accelerator function
     - Please also update the --gpus argument in the CLI to the appropriate number of GPUs
+    - Increase batch size and also # of workers
 
 2) Train: 
 ```
