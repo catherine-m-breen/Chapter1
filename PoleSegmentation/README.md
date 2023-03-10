@@ -5,10 +5,9 @@ All code was adapted from https://github.com/zhmiao/GeneralSegmentation in order
 2) annotations (masked images) are saved in a subfolder from the root folder called "SegmentationClass"
 3) an image list, including file names, is saved in a csv in a subfolder called "ImageSets". This is used to create the train/test splits
 
-## Example images 
-image: 
+## Example images (image: left; mask: right)
 ![image](https://github.com/catherine-m-breen/Chapter1/blob/main/example_imgs/W8C_WSCT0134.JPG)
-mask:  
+![mask](https://github.com/catherine-m-breen/Chapter1/blob/main/example_imgs/mask_W8C_WSCT0134.JPG)
 
 
 ## Training and evaluation
