@@ -5,7 +5,7 @@ All code was adapted from https://github.com/zhmiao/GeneralSegmentation in order
 2) annotations (masked images) are saved in a subfolder from the root folder called "SegmentationClass"
 3) an image list, including file names, is saved in a csv in a subfolder called "ImageSets". This is used to create the train/test splits
 
-## Example images (image: left; mask: right)
+### Example images (image: left; mask: right)
 ![image](https://github.com/catherine-m-breen/Chapter1/blob/main/example_imgs/W8C_WSCT0134.JPG)
 ![mask](https://github.com/catherine-m-breen/Chapter1/blob/main/example_imgs/mask_W8C_WSCT0134.JPG)
 
@@ -32,8 +32,9 @@ Once the model is trained, a weight file will be saved to `weights` folder.
 ```
 python main.py --config ./configs/voc_plain_051522.yaml --gpus 0 --evaluate path_to_your_weights_file
 ```
-**4) NOTE: Logit adjustment method only works for binary masks now. Don't use it on VOC.**
-**5) NOTE: Experiments will be saved to (TBD.)
+**4) NOTE: Experiments will be saved to (TBD.)**
+
+**5) NOTE: Logit adjustment method only works for binary masks now. Don't use it on VOC.**
 
 ## Basic packages:
 - pytorch
