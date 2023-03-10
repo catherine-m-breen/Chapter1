@@ -1,5 +1,5 @@
 # training
-conf_id: VOC_plain_030923
+conf_id: snowpole_plain_030923
 algorithm: Plain
 num_iters: 30000
 log_interval: 10
@@ -7,7 +7,7 @@ parallel: 0
 
 # data
 # will need to update with GPU settings
-dataset_root: /Users/catherinebreen/Chapter1/segmentation/
+dataset_root: /Users/catherinebreen/Chapter1/segmentationModel/
 dataset_name: SNOWPOLES
 num_classes: 2 #
 batch_size: 1 # will update with GPU

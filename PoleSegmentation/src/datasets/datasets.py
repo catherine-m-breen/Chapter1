@@ -43,11 +43,16 @@ class SNOWPOLE_DS(Dataset):
         image_dir = os.path.join(rootdir, 'JPEGImages')
 
         mask_dir = os.path.join(rootdir, 'SegmentationClass')
+
+        ####### split #########
         splits_dir = os.path.join(rootdir, 'ImageSets/Segmentation')
         split_f = os.path.join(splits_dir, '{}.txt'.format(dset))
 
         with open(os.path.join(split_f), "r") as f:
             file_names = [x.strip() for x in f.readlines()]
+
+        
+        #######################
         
         self.images = [os.path.join(image_dir, '{}.jpg'.format(x)) for x in file_names]
         self.masks = [os.path.join(mask_dir, '{}.png'.format(x)) for x in file_names]
