@@ -1,7 +1,3 @@
-
-#### 2023 Zhongqi Miao
-#### updates from Catherine Breen
-
 All code was adapted from https://github.com/zhmiao/GeneralSegmentation for segmenting snow poles from camera trap images for snow depth measurement. Please visit Zhongqi Miao's github page for information on model development. 
 
 ## data structure information
