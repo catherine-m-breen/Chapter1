@@ -3,6 +3,7 @@ import json
 import numpy as np
 from PIL import Image
 import pandas as pd ## Catherine edit
+import IPython ## Catherine edit
 
 from torch.utils.data import Dataset, DataLoader
 import pytorch_lightning as pl
