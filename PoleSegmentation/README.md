@@ -1,7 +1,7 @@
 All code was adapted from https://github.com/zhmiao/GeneralSegmentation in order to segment snow poles from camera trap images for snow depth measurement. Please visit Zhongqi Miao's github page for information on model development. 
 
 ## data structure information
-1) original images are saved in a subfolder from the root folder called "JPEGImages"
+1) original images are saved in a nested subfolder from the root folder called "JPEGImages". Each camera folder has a unique folder ID that matches the camera ID. It is critical that the first part of the image name is the camera ID followed by an "_". For example, for camera E9E, an example image is E9E_0024.JPG, where E9E corresponds to the folder and the camera ID. 
 2) annotations (masked images) are saved in a subfolder from the root folder called "SegmentationClass"
 3) an image list, including file names, is saved in a csv in a subfolder called "ImageSets". This is used to create the train/test splits
 
