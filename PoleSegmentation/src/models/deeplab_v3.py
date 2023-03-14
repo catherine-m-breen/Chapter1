@@ -1,3 +1,8 @@
+'''
+Catherine updates: 
+- num_cls (line 51): updated from 21 to 2 to reflect binary segmentation 
+'''
+
 import os
 import copy
 from collections import OrderedDict
@@ -9,7 +14,7 @@ import torch.nn.functional as F
 from torchvision.models.resnet import resnet50
 from torchvision.models.segmentation.deeplabv3 import DeepLabHead, ASPP
 from torchvision.models._utils import IntermediateLayerGetter
-
+import IPython
 
 __all__ = [
     'DeepLabV3_ResNet50'
@@ -43,7 +48,7 @@ class DeepLabV3_ResNet50(nn.Module):
 
     name = 'DeepLabV3_ResNet50'
 
-    def __init__(self, num_cls=21, output_stride=8):
+    def __init__(self, num_cls=2, output_stride=8): ## Catherine Update, update this to 2 from 21
         super(DeepLabV3_ResNet50, self).__init__()
         self.num_cls = num_cls
         self.feature = None
@@ -72,7 +77,8 @@ class DeepLabV3_ResNet50(nn.Module):
                 m.momentum = 0.01
 
     def setup_criteria(self):
-        self.criterion_seg = nn.CrossEntropyLoss(ignore_index=255, reduction='mean')
+       # IPython.embed()
+        self.criterion_seg = nn.CrossEntropyLoss(ignore_index=255, reduction='mean') #nn.BCELoss(reduction='mean')##
 
     def forward(self, data):
         input_shape = data.shape[-2:]

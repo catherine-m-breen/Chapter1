@@ -2,8 +2,10 @@ import os
 import json
 import numpy as np
 from PIL import Image
+import cv2
 import pandas as pd ## Catherine edit
 import IPython ## Catherine edit
+import matplotlib.pyplot as plt ## Catherine edit for testing 
 
 from torch.utils.data import Dataset, DataLoader
 import pytorch_lightning as pl
@@ -53,6 +55,7 @@ class SNOWPOLE_DS(Dataset):
 
         if dset == 'train':
             file_names = training_samples['filename']
+  
             #folder_names = [str(file.split('_')[0]) for file in file_names]
         
         if dset == 'val':
@@ -71,11 +74,20 @@ class SNOWPOLE_DS(Dataset):
     def __getitem__(self, index):
         img = Image.open(self.images[index]).convert('RGB')
         target = Image.open(self.masks[index])
-        
+        target1 = target ## pole channel (positive pixels)
+        target2 = np.logical_not(target).astype(int) ## not pole channel (negative pixels)
+        target_stack = np.hstack((target1, target2)) #, axis =1)
+        print('target', target.size)
+        print('target1', target1.size)
+        print('target2', target2.size)
+        print('stack', target_stack.size)
+        # target1 = target ## snow pixels
+        # target2 = ~target ## inverse of target (no snow pixels)
+        # target = torch.cat([target1, target2], dim = 0) ### 
+
         if self.transforms is not None:
             img, target = self.transforms(img, target)
 
-        #print('target dimensions' , target.shape)
         return img, target
 
     def __len__(self):
@@ -92,7 +104,7 @@ class SNOWPOLES(pl.LightningDataModule):
         self.dset_tr = SNOWPOLE_DS(rootdir=self.conf.dataset_root,
                               dset='train',
                               transforms=data_transforms['train']) # inspect images without the transforms
-
+        #IPython.embed()
         self.dset_te = SNOWPOLE_DS(rootdir=self.conf.dataset_root,
                               dset='val',
                               transforms=data_transforms['val'] )
