@@ -78,7 +78,7 @@ class DeepLabV3_ResNet50(nn.Module):
 
     def setup_criteria(self):
        # IPython.embed()
-        self.criterion_seg = nn.CrossEntropyLoss(ignore_index=255, reduction='mean') #nn.BCELoss(reduction='mean')##
+        self.criterion_seg = nn.CrossEntropyLoss(ignore_index=255, reduction='mean') ##nn.BCELoss(reduction='mean')
 
     def forward(self, data):
         input_shape = data.shape[-2:]

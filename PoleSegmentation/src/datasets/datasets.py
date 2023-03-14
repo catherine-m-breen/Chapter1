@@ -50,7 +50,7 @@ class SNOWPOLE_DS(Dataset):
 
         ####### split #########
         splits_dir = os.path.join(rootdir, 'ImageSets')
-        df_data = pd.read_csv(os.path.join(splits_dir,'snowPoles_resized_labels_clean.csv'))
+        df_data = pd.read_csv(os.path.join(splits_dir,'snowPoles_resized_labels_clean.csv')) #snowPoles_resized_labels_clean
         training_samples = df_data.sample(frac=0.9, random_state=100) ## same shuffle everytime
 
         if dset == 'train':
@@ -81,14 +81,19 @@ class SNOWPOLE_DS(Dataset):
             ''' debugging for index error, try separating classes into two channels'''
             target1 = target
             target2 = ~target 
-            ## also try 2 dimensions 
-            target_stack = torch.stack([target1, target2], dim = 0) #torch.cat([target1, target2], dim = 0) #, axis =1)
+            target_stack = torch.stack([target1.float(), target2.float()], dim = 0) #torch.cat([target1, target2], dim = 0) #, axis =1)
             print('target', target.shape)
             print('target1', target1.shape)
             print('target2', target2.shape)
-            target = target_stack
-            print('stack', target_stack.shape)
-            ## add a step to separate the channels here ##
+
+            ''' adding a step to check for floating point type'''
+            target = target_stack.float()
+            print('stack', target.shape)
+            ### check for floating point 
+            print('checking dtypes...', img.dtype, target.dtype)
+
+            ## change image to floating point 
+            img = img.float()
 
         return img, target
 
