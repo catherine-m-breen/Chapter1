@@ -74,27 +74,19 @@ class SNOWPOLE_DS(Dataset):
     def __getitem__(self, index):
         img = Image.open(self.images[index]).convert('RGB')
         target = Image.open(self.masks[index])
-        # target1 = target ## pole channel (positive pixels)
-        # target2 = np.logical_not(target).astype(int) ## not pole channel (negative pixels)
-        # target_stack = np.vstack((target1, target2)) #, axis =1)
-        # print('target', target.size)
-        # print('target1', target1.size)
-        # print('target2', target2.size)
-        # print('stack', target_stack.size)
-        # target1 = target ## snow pixels
-        # target2 = ~target ## inverse of target (no snow pixels)
-        # target = torch.cat([target1, target2], dim = 0) ### 
 
         if self.transforms is not None:
             img, target = self.transforms(img, target)
             
+            ''' debugging for index error, try separating classes into two channels'''
             target1 = target
             target2 = ~target 
+            ## also try 2 dimensions 
             target_stack = torch.stack([target1, target2], dim = 0) #torch.cat([target1, target2], dim = 0) #, axis =1)
-            target = target_stack
             print('target', target.shape)
             print('target1', target1.shape)
             print('target2', target2.shape)
+            target = target_stack
             print('stack', target_stack.shape)
             ## add a step to separate the channels here ##
 
