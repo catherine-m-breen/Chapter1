@@ -14,7 +14,8 @@ def main():
     # Argument parser for command-line arguments:
     # python ct_classifier/train.py --config configs/exp_resnet18.yaml
     parser = argparse.ArgumentParser(description='Train deep learning model.')
-    parser.add_argument('--filepath', help='Path to image dir', default = '/Users/catherinebreen/Documents/Chapter 1/other_snowpoles/CUB-L-02') 
+    parser.add_argument('--filepath', help='Path to image dir', default = '/Users/catherinebreen/Documents/Chapter 1/other_snowpoles/CUB-L-02')
+    parser.add_argument('--savedir', help='Path to save csv', default = '/Users/catherinebreen/Documents/Chapter 1/other_snowpoles') 
     args = parser.parse_args()
         
     dir = glob.glob(f"{args.filepath}/*") ## path to 
@@ -44,9 +45,9 @@ def main():
         # creationTimes.append(dt_c)
         
     df = pd.DataFrame({'filename':filename, 'topX':topX,'topY':topY, 'bottomX':bottomX, 'bottomY':bottomY, 'PixelLengths':PixelLengths })
-    df.to_csv(f'/Users/catherinebreen/Documents/Chapter 1/other_snowpoles/{cameraNumber}_validation.csv')
+    df.to_csv(f'{args.savedir}/{cameraNumber}_validation.csv')
 
 if __name__ == '__main__':
     # This block only gets executed if you call the "train.py" script directly
-    # (i.e., "python ct_classifier/train.py").
+    # (i.e., "python snowpole_annotations.py --filepath '[insert filepath here]' ").
     main()
