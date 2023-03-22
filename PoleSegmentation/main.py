@@ -50,7 +50,7 @@ def main(
     #######################
     # Load configurations #
     #######################
-    ##config = '/Users/catherinebreen/code/Chapter1/PoleSegmentation/configs/snowpole_plain_030923.yaml' ## debugging
+    config = '/Users/catherinebreen/code/Chapter1/PoleSegmentation/configs/snowpole_plain_030923.yaml' ## debugging
 
 
     with open(config) as f:

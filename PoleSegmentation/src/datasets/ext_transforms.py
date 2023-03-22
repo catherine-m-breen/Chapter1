@@ -276,7 +276,7 @@ class ExtToTensor(object):
     Converts a PIL Image or numpy.ndarray (H x W x C) in the range
     [0, 255] to a torch.FloatTensor of shape (C x H x W) in the range [0.0, 1.0].
     """
-    def __init__(self, normalize=True, target_type='uint8'):
+    def __init__(self, normalize=True, target_type='uint8'): 
         self.normalize = normalize
         self.target_type = target_type
     def __call__(self, pic, lbl):

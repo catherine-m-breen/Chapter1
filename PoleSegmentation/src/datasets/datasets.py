@@ -1,3 +1,11 @@
+'''
+Catherine Updates: 
+- updated snowpole class
+- converted datatypes for cpu: https://pytorch.org/docs/stable/tensors.html
+
+'''
+
+
 import os
 import json
 import numpy as np
@@ -11,6 +19,7 @@ from torch.utils.data import Dataset, DataLoader
 import pytorch_lightning as pl
 
 from .ext_transforms import *
+import IPython
 
 __all__ = [
     'SNOWPOLES'
@@ -74,26 +83,28 @@ class SNOWPOLE_DS(Dataset):
     def __getitem__(self, index):
         img = Image.open(self.images[index]).convert('RGB')
         target = Image.open(self.masks[index])
+       ## target = target/255
+
+
+       ## do it before the transform instead
 
         if self.transforms is not None:
             img, target = self.transforms(img, target)
-            
+            IPython.embed()
             ''' debugging for index error, try separating classes into two channels'''
             target1 = target
-            target2 = ~target 
-            target_stack = torch.stack([target1.float(), target2.float()], dim = 0) #torch.cat([target1, target2], dim = 0) #, axis =1)
-            print('target', target.shape)
-            print('target1', target1.shape)
-            print('target2', target2.shape)
+            print(target1)
+            target2 = ~target1//255.0
+            print(target2)
+            print('shapes', target1.shape, target2.shape)
+            target_stack = torch.stack([target1, target2], dim = 0) #torch.cat([target1, target2], dim = 0) #, axis =1)
 
             ''' adding a step to check for floating point type'''
-            target = target_stack.float()
-            print('stack', target.shape)
-            ### check for floating point 
-            print('checking dtypes...', img.dtype, target.dtype)
-
+            target = target_stack.to(torch.long)#.float()
+            target = torch.tensor(target, dtype=torch.long, device='cpu')
             ## change image to floating point 
-            img = img.float()
+            img = torch.tensor(img, dtype=torch.long, device='cpu')
+            print('checking dtypes...', img.dtype, target.dtype)
 
         return img, target
 
@@ -108,6 +119,7 @@ class SNOWPOLES(pl.LightningDataModule):
         self._log_hyperparams = False
 
         print("Loading data...")
+        IPython.embed()
         self.dset_tr = SNOWPOLE_DS(rootdir=self.conf.dataset_root,
                               dset='train',
                               transforms=data_transforms['train']) # inspect images without the transforms

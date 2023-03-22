@@ -26,12 +26,13 @@ class DeepLabHead(nn.Module):
 
         self.classifier = nn.Sequential(
             ASPP(in_channels, aspp_dilate),
-            nn.Conv2d(256, 256, 3, padding=1, bias=False),
+            nn.Conv2d(256, 256, 3, padding=1, bias=False), 
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
             nn.Conv2d(256, num_classes, 1)
         )
         self._init_weight()
+        print('num_classes', num_classes)
 
     def forward(self, feature):
         return self.classifier(feature)
@@ -48,7 +49,7 @@ class DeepLabV3_ResNet50(nn.Module):
 
     name = 'DeepLabV3_ResNet50'
 
-    def __init__(self, num_cls=2, output_stride=8): ## Catherine Update, update this to 2 from 21
+    def __init__(self, num_cls=21, output_stride=8): ## Catherine Update, update this to 2 from 21
         super(DeepLabV3_ResNet50, self).__init__()
         self.num_cls = num_cls
         self.feature = None
@@ -78,6 +79,7 @@ class DeepLabV3_ResNet50(nn.Module):
 
     def setup_criteria(self):
        # IPython.embed()
+      #  print(self)
         self.criterion_seg = nn.CrossEntropyLoss(ignore_index=255, reduction='mean') ##nn.BCELoss(reduction='mean')
 
     def forward(self, data):
