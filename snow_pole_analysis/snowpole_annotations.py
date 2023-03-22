@@ -12,8 +12,7 @@ import IPython
 def main():
 
     # Argument parser for command-line arguments:
-    # python ct_classifier/train.py --config configs/exp_resnet18.yaml
-    parser = argparse.ArgumentParser(description='Train deep learning model.')
+    parser = argparse.ArgumentParser(description='Label snowpole images')
     parser.add_argument('--filepath', help='Path to image dir', default = '/Users/catherinebreen/Documents/Chapter 1/other_snowpoles/CUB-L-02')
     parser.add_argument('--savedir', help='Path to save csv', default = '/Users/catherinebreen/Documents/Chapter 1/other_snowpoles') 
     args = parser.parse_args()
