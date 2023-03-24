@@ -10,9 +10,9 @@ from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
 from pytorch_lightning.loggers import CSVLogger, CometLogger, TensorBoardLogger
 from pytorch_lightning.strategies.ddp import DDPStrategy
 
-from src import algorithms # cat edit, removed pi from here
+from src import algorithms
 from src import datasets
-import IPython ## cat edit, added IPython for debugging
+import IPython
 
 app = typer.Typer(pretty_exceptions_show_locals=False)
 
@@ -32,10 +32,8 @@ def main(
     ############
     # Set gpus #
     ############
-    #IPython.embed()
-    gpus = gpus if torch.cuda.is_available() else '0' ## cat edit: changed from None, because it needed to be an integer
-    #if gpus != None: ## cat edit, so it can run locally
-    gpus = [int(i) for i in gpus.split(',')]
+    gpus = gpus if torch.cuda.is_available() else 'cpu'
+    gpus = 'cpu' #[int(i) for i in gpus.split(',')]
 
     #############################
     # Set environment variables #
@@ -50,13 +48,10 @@ def main(
     #######################
     # Load configurations #
     #######################
-    config = '/Users/catherinebreen/code/Chapter1/PoleSegmentation/configs/snowpole_plain_030923.yaml' ## debugging
-
-
     with open(config) as f:
         conf = Munch(yaml.load(f, Loader=yaml.FullLoader))
     if len(gpus) > 1:
-        conf.batch_size = int(conf.batch_size / torch.cuda.device_count())
+        conf.batch_size = 2 # int(conf.batch_size / torch.cuda.device_count())
 
     pl.seed_everything(seed)
 
@@ -66,8 +61,9 @@ def main(
     dataset = datasets.__dict__[conf.dataset_name](conf=conf)
     learner = algorithms.__dict__[conf.algorithm](conf=conf)
 
-    #IPython.embed() 
-    ## then run: a, b = dataset.dset_tr.__getitem__(10) to inspect a target 
+    weights_folder = 'weights_dev' if dev else 'weights'
+    print('WEIGHTS PTH!!!!','./{}/{}'.format(weights_folder, conf.algorithm))
+
     ###############
     # Load logger #
     ###############
@@ -88,9 +84,9 @@ def main(
         )
     elif logger_type == 'comet':
         logger = CometLogger(
-            api_key= "crD0w5pAk59gNUJ88yfNuMo5F", ## os.environ.get('COMET_API_KEY'), ## ask Miao where to store this 
+            api_key=os.environ.get('COMET_API_KEY'),
             save_dir='./{}/{}'.format(log_folder, conf.algorithm),
-            project_name= "snowpole-segmentation", #project,  # Optional
+            project_name=project,  # Optional
             experiment_name='{}_{}_{}'.format(conf.algorithm, conf.conf_id, session),
         )
 
@@ -110,14 +106,13 @@ def main(
     #################
     trainer = pl.Trainer(
         max_steps=conf.num_iters,
-        #accelerator= 'gpu', devices=[0], ## cat edit, for debugging purposes on local machine only 
         check_val_every_n_epoch=1, 
         log_every_n_steps = conf.log_interval, 
+        accelerator = 'cpu',
         #gpus=gpus,
         logger=None if evaluate is not None else logger,
         callbacks=[lr_monitor, checkpoint_callback],
-        #strategy="ddp", accelerator="cpu", devices=3,
-        #strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp', #'dp',
+        #strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp',
         num_sanity_val_steps=0,
         profiler='simple',
         enable_progress_bar=True,
@@ -129,6 +124,13 @@ def main(
     if evaluate is not None:
         trainer.validate(learner, datamodule=dataset, ckpt_path=evaluate)
     else:
+        #IPython.embed()
+        # print(dataset.dset_tr.__getitem__(4)[1].device)
+        # print(dataset.dset_tr.__getitem__(4)[1].dtype)
+        # print(dataset.dset_tr.__getitem__(4)[1].shape)
+        # print('device of model', next(learner.parameters()).device)
+        # print('device of model', next(learner.parameters()).dtype)
+
         trainer.fit(learner, datamodule=dataset)
 
 if __name__ == '__main__':

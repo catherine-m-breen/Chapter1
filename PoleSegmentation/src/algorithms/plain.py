@@ -53,7 +53,7 @@ class Plain(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         data, labels = batch
         outputs = self.net(data)
-        loss = self.net.criterion_seg(outputs, labels.long())
+        loss = self.net.criterion_seg(outputs, torch.tensor(labels, dtype=torch.float32)) ## cat edit 
         self.log("train_loss", loss)
         return loss
 

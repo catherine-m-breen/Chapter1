@@ -49,7 +49,7 @@ class DeepLabV3_ResNet50(nn.Module):
 
     name = 'DeepLabV3_ResNet50'
 
-    def __init__(self, num_cls=21, output_stride=8): ## Catherine Update, update this to 2 from 21
+    def __init__(self, num_cls=2, output_stride=8): ## Catherine Update, update this to 2 from 21
         super(DeepLabV3_ResNet50, self).__init__()
         self.num_cls = num_cls
         self.feature = None
@@ -80,7 +80,9 @@ class DeepLabV3_ResNet50(nn.Module):
     def setup_criteria(self):
        # IPython.embed()
       #  print(self)
-        self.criterion_seg = nn.CrossEntropyLoss(ignore_index=255, reduction='mean') ##nn.BCELoss(reduction='mean')
+        self.criterion_seg = nn.CrossEntropyLoss( reduction='mean') ##nn.BCELoss(reduction='mean')ignore_index=255,
+        #self.criterion_seg = nn.functional.binary_cross_entropy_with_logits(reduction='mean')
+        #self.criterion_seg = nn.BCELoss(reduction='mean')
 
     def forward(self, data):
         input_shape = data.shape[-2:]

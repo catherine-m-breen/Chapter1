@@ -7,7 +7,7 @@ import random
 import numbers
 import numpy as np
 from PIL import Image
-import IPython
+
 
 #
 #  Extended Transforms for Semantic Segmentation
@@ -108,7 +108,7 @@ class ExtRandomScale(object):
         """
         assert img.size == lbl.size
         scale = random.uniform(self.scale_range[0], self.scale_range[1])
-        target_size = (int(img.size[1]*scale), int(img.size[0]*scale) )
+        target_size = ( int(img.size[1]*scale), int(img.size[0]*scale) )
         return F.resize(img, target_size, _interpolation_modes_from_int(self.interpolation)), F.resize(lbl, target_size, _interpolation_modes_from_int(Image.NEAREST))
 
     def __repr__(self):
@@ -276,7 +276,7 @@ class ExtToTensor(object):
     Converts a PIL Image or numpy.ndarray (H x W x C) in the range
     [0, 255] to a torch.FloatTensor of shape (C x H x W) in the range [0.0, 1.0].
     """
-    def __init__(self, normalize=True, target_type='uint8'): 
+    def __init__(self, normalize=True, target_type='uint8'):
         self.normalize = normalize
         self.target_type = target_type
     def __call__(self, pic, lbl):

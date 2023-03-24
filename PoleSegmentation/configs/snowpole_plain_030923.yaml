@@ -1,8 +1,8 @@
 # training
 conf_id: snowpole_plain_030923
 algorithm: Plain
-num_iters: 30000
-log_interval: 10
+num_iters: 100 #30000
+log_interval: 2 ##cat edit: updated to 2 from 10, because it needs to be smaller than batch size
 parallel: 0
 
 # data
@@ -11,7 +11,7 @@ dataset_root: /Users/catherinebreen/Documents/Chapter 1/segmentationModel/sample
 dataset_name: SNOWPOLES
 num_classes: 2 #
 batch_size: 4 # will update with GPU
-num_workers: 10 #64
+num_workers: 3 #64
 
 # model
 model_name: DeepLabV3_ResNet50

@@ -2,7 +2,6 @@
 Catherine Updates: 
 - updated snowpole class
 - converted datatypes for cpu: https://pytorch.org/docs/stable/tensors.html
-
 '''
 
 
@@ -64,7 +63,6 @@ class SNOWPOLE_DS(Dataset):
 
         if dset == 'train':
             file_names = training_samples['filename']
-  
             #folder_names = [str(file.split('_')[0]) for file in file_names]
         
         if dset == 'val':
@@ -83,30 +81,33 @@ class SNOWPOLE_DS(Dataset):
     def __getitem__(self, index):
         img = Image.open(self.images[index]).convert('RGB')
         target = Image.open(self.masks[index])
-       ## target = target/255
-
+        # target = np.asarray(target).astype('float32')
+        # target /= 255
+        # print(np.max(target))
+        # target = Image.fromarray(target)
 
        ## do it before the transform instead
 
         if self.transforms is not None:
             img, target = self.transforms(img, target)
-            IPython.embed()
             ''' debugging for index error, try separating classes into two channels'''
             target1 = target
-            print(target1)
-            target2 = ~target1//255.0
-            print(target2)
-            print('shapes', target1.shape, target2.shape)
+            #target2 = ~target1//255.0
+            target2 = (torch.div(target1,255))
+            #print(target2)
+            target1, target2 = torch.tensor(target1, dtype = torch.float32), torch.tensor(target2, dtype=torch.float32)
+            #print('shapes', target1.shape, target2.shape)
             target_stack = torch.stack([target1, target2], dim = 0) #torch.cat([target1, target2], dim = 0) #, axis =1)
 
             ''' adding a step to check for floating point type'''
-            target = target_stack.to(torch.long)#.float()
-            target = torch.tensor(target, dtype=torch.long, device='cpu')
+            target = target_stack.to(torch.float32)#.float()
+            target = torch.tensor(target, dtype=torch.float32, device='cpu')
+            #print(target.shape)
             ## change image to floating point 
-            img = torch.tensor(img, dtype=torch.long, device='cpu')
-            print('checking dtypes...', img.dtype, target.dtype)
-
-        return img, target
+            #img = torch.tensor(img, dtype=torch.float32, device='cpu')
+        
+        #print('checking dtypes...', img.dtype, target.dtype)
+        return img, target  #img.clone().detach(), target.clone().detach()
 
     def __len__(self):
         return len(self.images)
@@ -119,7 +120,7 @@ class SNOWPOLES(pl.LightningDataModule):
         self._log_hyperparams = False
 
         print("Loading data...")
-        IPython.embed()
+        #IPython.embed()
         self.dset_tr = SNOWPOLE_DS(rootdir=self.conf.dataset_root,
                               dset='train',
                               transforms=data_transforms['train']) # inspect images without the transforms
