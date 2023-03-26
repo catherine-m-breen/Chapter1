@@ -21,6 +21,8 @@ All code was adapted from https://github.com/zhmiao/GeneralSegmentation in order
 on local machine: 
 ```
 python main.py --config ./configs/snowpole_plain_030923.yaml --gpus 0 --logger-type comet --session 0
+or 
+python main.py --config ./configs/snowpole_plain_030923.yaml --gpus -1 --logger-type comet --session 0   
 ```
 
 on GPU: 

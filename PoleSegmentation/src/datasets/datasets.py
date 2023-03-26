@@ -38,6 +38,7 @@ data_transforms = {
     'val': ExtCompose([
             ExtResize(513),
             ExtCenterCrop(513),
+            ExtRandomHorizontalFlip(),
             ExtToTensor(),
             ExtNormalize(mean, std),
         ]),
@@ -59,7 +60,7 @@ class SNOWPOLE_DS(Dataset):
         ####### split #########
         splits_dir = os.path.join(rootdir, 'ImageSets')
         df_data = pd.read_csv(os.path.join(splits_dir,'snowPoles_resized_labels_clean.csv')) #snowPoles_resized_labels_clean
-        training_samples = df_data.sample(frac=0.9, random_state=100) ## same shuffle everytime
+        training_samples = df_data.sample(frac=0.9, random_state=200) ## same shuffle everytime
 
         if dset == 'train':
             file_names = training_samples['filename']
@@ -81,37 +82,32 @@ class SNOWPOLE_DS(Dataset):
     def __getitem__(self, index):
         img = Image.open(self.images[index]).convert('RGB')
         target = Image.open(self.masks[index])
-        # target = np.asarray(target).astype('float32')
-        # target /= 255
-        # print(np.max(target))
-        # target = Image.fromarray(target)
-
-       ## do it before the transform instead
 
         if self.transforms is not None:
+            #IPython.embed()
             img, target = self.transforms(img, target)
             ''' debugging for index error, try separating classes into two channels'''
             target1 = target
-            #target2 = ~target1//255.0
+            #print('before stack', target.shape)
             target2 = (torch.div(target1,255))
-            #print(target2)
-            target1, target2 = torch.tensor(target1, dtype = torch.float32), torch.tensor(target2, dtype=torch.float32)
-            #print('shapes', target1.shape, target2.shape)
+            #target1, target2 = torch.tensor(target1, dtype = torch.float32), torch.tensor(target2, dtype=torch.float32)
             target_stack = torch.stack([target1, target2], dim = 0) #torch.cat([target1, target2], dim = 0) #, axis =1)
-
+            #print('after stack', target_stack.shape)
             ''' adding a step to check for floating point type'''
             target = target_stack.to(torch.float32)#.float()
-            target = torch.tensor(target, dtype=torch.float32, device='cpu')
+            #target = torch.tensor(target) #, dtype=torch.float32) #, device='cpu')
             #print(target.shape)
             ## change image to floating point 
             #img = torch.tensor(img, dtype=torch.float32, device='cpu')
+            ## maybe add an empty dimension here 
+            #target = target.unsqueeze(0)
+            #print('maybe squeeze?', target.shape)
         
         #print('checking dtypes...', img.dtype, target.dtype)
         return img, target  #img.clone().detach(), target.clone().detach()
 
     def __len__(self):
         return len(self.images)
-
 
 class SNOWPOLES(pl.LightningDataModule):
     def __init__(self, conf):
@@ -127,11 +123,11 @@ class SNOWPOLES(pl.LightningDataModule):
         #IPython.embed()
         self.dset_te = SNOWPOLE_DS(rootdir=self.conf.dataset_root,
                               dset='val',
-                              transforms=data_transforms['val'] )
+                              transforms=data_transforms['train'] )
 
         self.dset_te = SNOWPOLE_DS(rootdir=self.conf.dataset_root,
                               dset='val',
-                              transforms=data_transforms['val'])
+                              transforms=data_transforms['train'])
 
         print("Done.")
 

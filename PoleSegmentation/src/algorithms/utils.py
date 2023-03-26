@@ -1,7 +1,7 @@
 import numpy as np
 from torch.optim.lr_scheduler import _LRScheduler
 from torchvision.transforms.functional import normalize
-
+import IPython
 
 class _StreamMetrics(object):
     def __init__(self):
@@ -51,9 +51,17 @@ class StreamSegMetrics(_StreamMetrics):
 
     def _fast_hist(self, label_true, label_pred):
         mask = (label_true >= 0) & (label_true < self.n_classes)
+
+        print('ERROR') 
+        print('self.classes', self.n_classes)
+        print('label_true', label_true)
+        print('mask',mask)
+
+        print('label_pred')
+        #IPython.embed()
         hist = np.bincount(
             self.n_classes * label_true[mask].astype(int) + label_pred[mask],
-            minlength=self.n_classes ** 2,
+            minlength=self.n_classes ** 2, 
         ).reshape(self.n_classes, self.n_classes)
         return hist
 
@@ -64,6 +72,7 @@ class StreamSegMetrics(_StreamMetrics):
             - mean IU
             - fwavacc
         """
+        ##IPython.embed()
         hist = self.confusion_matrix
         acc = np.diag(hist).sum() / hist.sum()
         acc_cls = np.diag(hist) / hist.sum(axis=1)

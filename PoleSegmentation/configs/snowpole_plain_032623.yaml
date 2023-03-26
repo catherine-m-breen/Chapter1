@@ -1,7 +1,7 @@
 # training
-conf_id: snowpole_plain_030923
+conf_id: snowpole_plain_032623
 algorithm: Plain
-num_iters: 1000 #30000
+num_iters: 100 #30000
 log_interval: 2 ##cat edit: updated to 2 from 10, because it needs to be smaller than batch size
 parallel: 0
 

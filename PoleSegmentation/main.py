@@ -4,17 +4,26 @@ import numpy as np
 import typer
 from munch import Munch
 
-import torch
+##import torch
+import comet_ml
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
 from pytorch_lightning.loggers import CSVLogger, CometLogger, TensorBoardLogger
 from pytorch_lightning.strategies.ddp import DDPStrategy
+import torch ## cat edit, they want this loaded after 
 
 from src import algorithms
 from src import datasets
 import IPython
 
 app = typer.Typer(pretty_exceptions_show_locals=False)
+
+# experiment = Experiment(
+#     api_key="crD0w5pAk59gNUJ88yfNuMo5F",
+#     project_name="snowpole-segmentation",
+#     workspace="catherine-m-breen",
+# )
+
 
 @app.command()
 def main(
@@ -45,6 +54,7 @@ def main(
     os.environ["VECLIB_MAXIMUM_THREADS"] = str(np_threads)
     os.environ["NUMEXPR_NUM_THREADS"] = str(np_threads)
     
+    
     #######################
     # Load configurations #
     #######################
@@ -61,8 +71,8 @@ def main(
     dataset = datasets.__dict__[conf.dataset_name](conf=conf)
     learner = algorithms.__dict__[conf.algorithm](conf=conf)
 
-    weights_folder = 'weights_dev' if dev else 'weights'
-    print('WEIGHTS PTH!!!!','./{}/{}'.format(weights_folder, conf.algorithm))
+    #IPython.embed()
+    #input, output = datasets.dset_te.__getitem__(4)
 
     ###############
     # Load logger #
@@ -84,7 +94,7 @@ def main(
         )
     elif logger_type == 'comet':
         logger = CometLogger(
-            api_key=os.environ.get('COMET_API_KEY'),
+            api_key= conf.comet_api, 
             save_dir='./{}/{}'.format(log_folder, conf.algorithm),
             project_name=project,  # Optional
             experiment_name='{}_{}_{}'.format(conf.algorithm, conf.conf_id, session),
@@ -94,13 +104,15 @@ def main(
     # Load callbacks #
     ##################
     weights_folder = 'weights_dev' if dev else 'weights'
-    checkpoint_callback = ModelCheckpoint(
-        monitor='valid_mean_IoU', mode='max', dirpath='./{}/{}'.format(weights_folder, conf.algorithm), save_top_k=1,
-        filename='{}-{}'.format(conf.conf_id, session) + '-{epoch:02d}-{valid_mean_IoU:.2f}', verbose=True
+    if not os.path.exists('./{}/{}'.format(weights_folder, conf.algorithm)):  
+        os.makedirs('./{}/{}'.format(weights_folder, conf.algorithm), exist_ok=True)
+
+    checkpoint_callback = ModelCheckpoint(monitor='valid_mean_IoU', mode='max', dirpath='./{}/{}'.format(weights_folder, conf.algorithm),
+        filename='{}-{}'.format(conf.conf_id, session) + '-{epoch:02d}-{valid_mean_IoU:.2f}'
     )
 
     lr_monitor = LearningRateMonitor(logging_interval='step')
-
+    #IPython.embed()
     #################
     # Setup trainer #
     #################
@@ -113,7 +125,7 @@ def main(
         logger=None if evaluate is not None else logger,
         callbacks=[lr_monitor, checkpoint_callback],
         #strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp',
-        num_sanity_val_steps=0,
+        num_sanity_val_steps=0, ## could make it 2 if you want to check your validation steps
         profiler='simple',
         enable_progress_bar=True,
     )
@@ -130,7 +142,7 @@ def main(
         # print(dataset.dset_tr.__getitem__(4)[1].shape)
         # print('device of model', next(learner.parameters()).device)
         # print('device of model', next(learner.parameters()).dtype)
-
+        #IPython.embed()
         trainer.fit(learner, datamodule=dataset)
 
 if __name__ == '__main__':

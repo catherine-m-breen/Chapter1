@@ -3,12 +3,14 @@ import os
 import numpy as np
 from PIL import Image
 
+import pytorch_lightning as pl # cat switched order
 import torch
 import torch.optim as optim
-import pytorch_lightning as pl
+
 
 from .utils import StreamSegMetrics, PolyLR, denormalize, snowpole_cmap
 from src import models
+import IPython
 
 __all__ = [
     'Plain'
@@ -53,8 +55,13 @@ class Plain(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         data, labels = batch
         outputs = self.net(data)
-        loss = self.net.criterion_seg(outputs, torch.tensor(labels, dtype=torch.float32)) ## cat edit 
+        loss = self.net.criterion_seg(outputs, labels.type(torch.float32)) #torch.tensor(labels, dtype=torch.float32)) ## cat edit 
         self.log("train_loss", loss)
+        #IPython.embed()
+        ## get the valid_mean_IoU
+        scores = self.metrics.get_results()
+        self.log('valid_mean_IoU', scores['Mean IoU'])
+
         return loss
 
     def on_validation_start(self):
@@ -63,13 +70,16 @@ class Plain(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         data, labels = batch
         outputs = self.net(data)
-        preds = outputs.detach().max(dim=1)[1]
+        #IPython.embed()
+        labels = labels.detach().max(dim=1)[1]  ## cat addition 
+        preds = outputs.detach().max(dim=1)[1] 
         self.metrics.update(labels.cpu().numpy(), preds.cpu().numpy())
         return (data.detach().cpu().numpy(), 
                 preds.detach().cpu().numpy(),
                 labels.detach().cpu().numpy())
 
     def validation_epoch_end(self, outputs):
+        IPython.embed()
         scores = self.metrics.get_results()
         self.log('valid_mean_IoU', scores['Mean IoU'])
         self.log('valid_overall_acc', scores['Overall Acc'])
@@ -78,7 +88,7 @@ class Plain(pl.LightningModule):
         total_data = np.concatenate([x[0] for x in outputs], axis=0)
         total_preds = np.concatenate([x[1] for x in outputs], axis=0)
         total_labels = np.concatenate([x[2] for x in outputs], axis=0)
-
+        
         for i in np.random.choice(len(total_labels), 10, replace=False):
             image = total_data[i]
             target = total_labels[i]
@@ -92,11 +102,14 @@ class Plain(pl.LightningModule):
             target = Image.fromarray(target)
             pred = Image.fromarray(pred)
 
+            IPython.embed()
             if self.logger.__class__.__name__ == 'CometLogger':
                 self.logger.experiment.log_image(image, name='{}_data.png'.format(i), overwrite=True)
                 self.logger.experiment.log_image(target, name='{}_target.png'.format(i), overwrite=True)
                 self.logger.experiment.log_image(pred, name='{}_pred.png'.format(i), overwrite=True)
             else:
+                if not os.path.exists('./log/temp_imgs'):  
+                     os.makedirs('./log/temp_imgs')
                 image.save('./log/temp_imgs/{}_data.png'.format(i))
                 target.save('./log/temp_imgs/{}_target.png'.format(i))
                 pred.save('./log/temp_imgs/{}_pred.png'.format(i))

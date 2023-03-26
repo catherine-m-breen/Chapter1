@@ -49,7 +49,7 @@ class DeepLabV3_ResNet50(nn.Module):
 
     name = 'DeepLabV3_ResNet50'
 
-    def __init__(self, num_cls=2, output_stride=8): ## Catherine Update, update this to 2 from 21
+    def __init__(self, num_cls=21, output_stride=8): ## Catherine Update, update this to 2 from 21
         super(DeepLabV3_ResNet50, self).__init__()
         self.num_cls = num_cls
         self.feature = None
