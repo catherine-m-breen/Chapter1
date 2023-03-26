@@ -43,5 +43,5 @@ python main.py --config ./configs/voc_plain_051522.yaml --gpus 0 --evaluate path
 - torchvision
 - pytorch-lightning
 - numpy
-- typer
+- typer (use typer[all] for rich text version)
 - munch
