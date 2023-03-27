@@ -73,7 +73,8 @@ def main(
 
     #IPython.embed()
     #input, output = datasets.dset_te.__getitem__(4)
-
+    print('training size:', dataset.dset_tr.__len__())
+    print('testing size:', dataset.dset_te.__len__())
     ###############
     # Load logger #
     ###############

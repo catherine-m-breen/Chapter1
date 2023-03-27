@@ -1,7 +1,7 @@
 # training
 conf_id: snowpole_plain_032623
 algorithm: Plain
-num_iters: 100 #30000
+num_iters: 10000 #30000
 log_interval: 2 ##cat edit: updated to 2 from 10, because it needs to be smaller than batch size
 parallel: 0
 
@@ -11,8 +11,8 @@ parallel: 0
 dataset_root: /Users/catherinebreen/Documents/Chapter 1/segmentationModel/sample/ ## update path when get on GPU
 dataset_name: SNOWPOLES
 num_classes: 2 #
-batch_size: 4 # will update with GPU
-num_workers: 3 #64
+batch_size: 20 # will update with GPU, works with 4 on local
+num_workers: 12 #64, works with 3 on local 
 comet_api: "crD0w5pAk59gNUJ88yfNuMo5F" ## update this if changing to different comet set-up 
 
 # model

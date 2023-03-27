@@ -13,6 +13,7 @@ import cv2
 import pandas as pd ## Catherine edit
 import IPython ## Catherine edit
 import matplotlib.pyplot as plt ## Catherine edit for testing 
+import glob ## cat edit: for local testing 
 
 from torch.utils.data import Dataset, DataLoader
 import pytorch_lightning as pl
@@ -60,7 +61,15 @@ class SNOWPOLE_DS(Dataset):
         ####### split #########
         splits_dir = os.path.join(rootdir, 'ImageSets')
         df_data = pd.read_csv(os.path.join(splits_dir,'snowPoles_resized_labels_clean.csv')) #snowPoles_resized_labels_clean
-        training_samples = df_data.sample(frac=0.9, random_state=200) ## same shuffle everytime
+
+        ## for local testing only ##
+        ## check to make sure it exists in the folder of interest
+        #IPython.embed()
+        list_of_images = glob.glob(f'{image_dir}/*')
+        list_of_images = [file.split('/')[-1] for file in list_of_images]
+        df_data = df_data[df_data['filename'].isin(list_of_images)].reset_index()
+
+        training_samples = df_data.sample(frac=0.9, random_state=100) ## same shuffle everytime
 
         if dset == 'train':
             file_names = training_samples['filename']
@@ -69,14 +78,13 @@ class SNOWPOLE_DS(Dataset):
         if dset == 'val':
             file_names = df_data[~df_data.index.isin(training_samples.index)]['filename']
             #folder_names = [file.split('_') for file in file_names]
-        #######################
 
         ## cat edits #1 took out jpg, because my files all have .JPG extensions
         ## cat edit #2 added mask_ at beginning, because my segmented images have that naming system 
         #self.images = [os.path.join(image_dir, '{}'.format(w),'{}'.format(x)) for w, x in zip(folder_names, file_names)] 
         self.images = [os.path.join(image_dir, '{}'.format(x)) for x in file_names]
         self.masks = [os.path.join(mask_dir, 'mask_{}'.format(x)) for x in file_names]
-
+        print(len(self.images))
         assert (len(self.images) == len(self.masks))
 
     def __getitem__(self, index):
@@ -91,17 +99,11 @@ class SNOWPOLE_DS(Dataset):
             #print('before stack', target.shape)
             target2 = (torch.div(target1,255))
             #target1, target2 = torch.tensor(target1, dtype = torch.float32), torch.tensor(target2, dtype=torch.float32)
-            target_stack = torch.stack([target1, target2], dim = 0) #torch.cat([target1, target2], dim = 0) #, axis =1)
+            target_stack = torch.stack([target2, target1], dim = 0) #torch.cat([target1, target2], dim = 0) #, axis =1)
             #print('after stack', target_stack.shape)
             ''' adding a step to check for floating point type'''
             target = target_stack.to(torch.float32)#.float()
             #target = torch.tensor(target) #, dtype=torch.float32) #, device='cpu')
-            #print(target.shape)
-            ## change image to floating point 
-            #img = torch.tensor(img, dtype=torch.float32, device='cpu')
-            ## maybe add an empty dimension here 
-            #target = target.unsqueeze(0)
-            #print('maybe squeeze?', target.shape)
         
         #print('checking dtypes...', img.dtype, target.dtype)
         return img, target  #img.clone().detach(), target.clone().detach()

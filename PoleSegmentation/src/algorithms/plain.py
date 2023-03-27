@@ -55,12 +55,13 @@ class Plain(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         data, labels = batch
         outputs = self.net(data)
-        loss = self.net.criterion_seg(outputs, labels.type(torch.float32)) #torch.tensor(labels, dtype=torch.float32)) ## cat edit 
+        loss = self.net.criterion_seg(outputs, labels.type(torch.float32)) ## cat edit: changed to float 
         self.log("train_loss", loss)
-        #IPython.embed()
+        # IPython.embed()
         ## get the valid_mean_IoU
         scores = self.metrics.get_results()
-        self.log('valid_mean_IoU', scores['Mean IoU'])
+        self.log('valid_mean_IoU', scores['Mean IoU']) ## cat edit: added tracking of valid_mean_IoU
+        #self.log_image()
 
         return loss
 
@@ -71,15 +72,16 @@ class Plain(pl.LightningModule):
         data, labels = batch
         outputs = self.net(data)
         #IPython.embed()
-        labels = labels.detach().max(dim=1)[1]  ## cat addition 
+        labels = labels.detach().max(dim=1)[1]  ## cat addition, just channel for snow [1]
         preds = outputs.detach().max(dim=1)[1] 
         self.metrics.update(labels.cpu().numpy(), preds.cpu().numpy())
+
         return (data.detach().cpu().numpy(), 
                 preds.detach().cpu().numpy(),
                 labels.detach().cpu().numpy())
 
     def validation_epoch_end(self, outputs):
-        IPython.embed()
+        #IPython.embed()
         scores = self.metrics.get_results()
         self.log('valid_mean_IoU', scores['Mean IoU'])
         self.log('valid_overall_acc', scores['Overall Acc'])
@@ -102,7 +104,6 @@ class Plain(pl.LightningModule):
             target = Image.fromarray(target)
             pred = Image.fromarray(pred)
 
-            IPython.embed()
             if self.logger.__class__.__name__ == 'CometLogger':
                 self.logger.experiment.log_image(image, name='{}_data.png'.format(i), overwrite=True)
                 self.logger.experiment.log_image(target, name='{}_target.png'.format(i), overwrite=True)

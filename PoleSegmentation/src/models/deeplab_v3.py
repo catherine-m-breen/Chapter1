@@ -32,7 +32,7 @@ class DeepLabHead(nn.Module):
             nn.Conv2d(256, num_classes, 1)
         )
         self._init_weight()
-        print('num_classes', num_classes)
+        #print('num_classes', num_classes)
 
     def forward(self, feature):
         return self.classifier(feature)
