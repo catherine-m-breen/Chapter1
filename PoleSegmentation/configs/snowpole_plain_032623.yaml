@@ -8,7 +8,7 @@ parallel: 0
 
 # data
 # will need to update with GPU settings
-dataset_root: /Users/catherinebreen/Documents/Chapter 1/segmentationModel/sample/ ## update path when get on GPU
+dataset_root: /Users/catherinebreen/Documents/Chapter1/segmentationModel/sample/ ## update path when get on GPU
 dataset_name: SNOWPOLES
 num_classes: 2 #
 batch_size: 20 # will update with GPU, works with 4 on local
