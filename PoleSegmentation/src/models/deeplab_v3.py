@@ -80,7 +80,7 @@ class DeepLabV3_ResNet50(nn.Module):
     def setup_criteria(self):
        # IPython.embed()
       #  print(self)
-        self.criterion_seg = nn.CrossEntropyLoss( reduction='mean') ##nn.BCELoss(reduction='mean')ignore_index=255,
+        self.criterion_seg = nn.CrossEntropyLoss(reduction='mean') ##nn.BCELoss(reduction='mean')ignore_index=255,
         #self.criterion_seg = nn.functional.binary_cross_entropy_with_logits(reduction='mean')
         #self.criterion_seg = nn.BCELoss(reduction='mean')
 
