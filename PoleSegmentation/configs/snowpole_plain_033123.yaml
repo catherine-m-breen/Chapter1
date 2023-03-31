@@ -1,0 +1,35 @@
+# training
+conf_id: snowpole_plain_030923
+algorithm: Plain
+num_iters: 1000 #30000
+log_interval: 2 ##cat edit: updated to 2 from 10, because it needs to be smaller than batch size
+parallel: 0
+
+
+# data
+# will need to update with GPU settings
+dataset_root: /datadrive/data/ ## update path when get on GPU
+dataset_name: SNOWPOLES
+num_classes: 2 #
+batch_size: 4 # will update with GPU
+num_workers: 3 #64
+comet_api: "crD0w5pAk59gNUJ88yfNuMo5F" ## update this if changing to different comet set-up 
+
+# model
+model_name: DeepLabV3_ResNet50
+num_layers: 50
+output_stride: 16
+weights_init: ImageNet
+
+# optim
+## feature
+lr_feature: 0.001
+momentum_feature: 0.9
+weight_decay_feature: 0.0004
+## classifier
+lr_classifier: 0.01
+momentum_classifier: 0.9
+weight_decay_classifier: 0.0004
+## lr_scheduler
+step_size: 10000
+gamma: 0.1
