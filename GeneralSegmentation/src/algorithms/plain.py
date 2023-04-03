@@ -27,7 +27,7 @@ class Plain(pl.LightningModule):
         self.hparams.update(conf.__dict__)
         self.save_hyperparameters(ignore=['conf', 'train_class_counts'])
         self.net = models.__dict__[self.hparams.model_name](num_cls=self.hparams.num_classes, 
-                                                            output_stride=self.hparams.output_stride)
+                                                            output_stride=self.hparams.output_stride) ##.to('cpu')
                              
         self.metrics = StreamSegMetrics(self.hparams.num_classes)
 

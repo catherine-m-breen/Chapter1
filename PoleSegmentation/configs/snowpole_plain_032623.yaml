@@ -11,8 +11,8 @@ parallel: 0
 dataset_root: /Users/catherinebreen/Documents/Chapter1/segmentationModel/sample/ ## update path when get on GPU
 dataset_name: SNOWPOLES
 num_classes: 2 #
-batch_size: 20 # will update with GPU, works with 4 on local
-num_workers: 10 #64, works with 3 on local 
+batch_size: 4 # will update with GPU, works with 4 on local
+num_workers: 4 #64, works with 3 on local 
 comet_api: "crD0w5pAk59gNUJ88yfNuMo5F" ## update this if changing to different comet set-up 
 
 # model

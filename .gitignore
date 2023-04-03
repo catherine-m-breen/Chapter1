@@ -4,6 +4,8 @@ __pycache__
 
 *weights*
 *log*
+command_lines.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
