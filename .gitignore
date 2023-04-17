@@ -1,6 +1,7 @@
 .DS_Store
 PoleSegmentation/.DS_Store
 __pycache__
+snow_pole_analysis/org_NINA.photos.ipynb
 
 *weights*
 *log*
