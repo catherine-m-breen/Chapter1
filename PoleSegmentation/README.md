@@ -33,6 +33,7 @@ on GPU:
 python main.py --config ./configs/snowpole_plain_030923.yaml --gpus 0,1,2,3 --logger_type comet --session 0 
 ```
 Once the model is trained, a weight file will be saved to `weights` folder.
+
 3) Evaluate:
 ```
 python main.py --config ./configs/voc_plain_051522.yaml --gpus 0 --evaluate path_to_your_weights_file
