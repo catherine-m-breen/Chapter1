@@ -80,7 +80,7 @@ class Plain(pl.LightningModule):
                 preds.detach().cpu().numpy(),
                 labels.detach().cpu().numpy())
 
-    def on_validation_epoch_end(self, outputs): ## instead of validation_epoch_end #on_validation_end
+    def on_validation_epoch_end(self, outputs): ## instead of validation_epoch_end #on_validation_epoch_end
         #IPython.embed()
         scores = self.metrics.get_results()
         self.log('valid_mean_IoU', scores['Mean IoU'])
