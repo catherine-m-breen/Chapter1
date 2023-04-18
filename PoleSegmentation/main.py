@@ -41,8 +41,8 @@ def main(
     ############
     # Set gpus #
     ############
-    IPython.embed()
-    gpus = gpus if torch.cuda.is_available() else 'cpu'
+    #IPython.embed()
+    gpus = gpus #if torch.cuda.is_available() else 'cpu'
     gpus = [int(i) for i in gpus.split(',')] # 'cpu' # cat edit: for gpu
 
     #############################
@@ -123,7 +123,7 @@ def main(
         check_val_every_n_epoch=1, 
         log_every_n_steps = conf.log_interval, 
         #accelerator = 'cpu', # cat edit: comment if using gpu
-        gpus=gpus, # cat edit: comment out if no gpu
+        #gpus=gpus, # cat edit: comment out if no gpu
         logger=None if evaluate is not None else logger,
         callbacks=[lr_monitor, checkpoint_callback],
         strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp', # cat edit: comment out if no gpu
