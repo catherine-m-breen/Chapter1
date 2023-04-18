@@ -118,18 +118,32 @@ def main(
     #################
     # Setup trainer #
     #################
-    trainer = pl.Trainer(
-        max_steps=conf.num_iters,
-        check_val_every_n_epoch=1, 
-        log_every_n_steps = conf.log_interval, 
-        #accelerator = 'cpu', # cat edit: comment if using gpu
-        #gpus=gpus, # cat edit: comment out if no gpu
-        logger=None if evaluate is not None else logger,
-        callbacks=[lr_monitor, checkpoint_callback],
-        strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp', # cat edit: comment out if no gpu
-        num_sanity_val_steps=0, ## could make it 2 if you want to check your validation steps
-        profiler='simple',
-        enable_progress_bar=True,
+    if gpus == 'cpu':
+        trainer = pl.Trainer(
+            max_steps=conf.num_iters,
+            check_val_every_n_epoch=1, 
+            log_every_n_steps = conf.log_interval, 
+            accelerator = 'cpu', # cat edit: comment if using gpu
+            #gpus=gpus, # cat edit: comment out if no gpu
+            logger=None if evaluate is not None else logger,
+            callbacks=[lr_monitor, checkpoint_callback],
+            #strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp', # cat edit: comment out if no gpu
+            num_sanity_val_steps=0, ## could make it 2 if you want to check your validation steps
+            profiler='simple',
+            enable_progress_bar=True,
+        )
+    else: 
+        trainer = pl.Trainer(
+            max_steps=conf.num_iters,
+            check_val_every_n_epoch=1, 
+            log_every_n_steps = conf.log_interval, 
+            #gpus=gpus,
+            logger=None if evaluate is not None else logger,
+            callbacks=[lr_monitor, checkpoint_callback],
+            strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp',
+            num_sanity_val_steps=0,
+            profiler='simple',
+            enable_progress_bar=True,
     )
 
     #######
