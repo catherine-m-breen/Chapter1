@@ -41,7 +41,7 @@ def main(
     ############
     # Set gpus #
     ############
-    IPython.embed()
+    #IPython.embed()
     gpus = gpus if torch.cuda.is_available() else 'cpu'
     gpus = [int(i) for i in gpus.split(',')] # 'cpu' # cat edit: for gpu
 
