@@ -8,16 +8,17 @@ import pandas as pd
 import os
 import datetime
 import IPython
+import numpy as np 
 
 def main():
 
     # Argument parser for command-line arguments:
     parser = argparse.ArgumentParser(description='Label snowpole images')
-    parser.add_argument('--filepath', help='Path to image dir', default = '/Users/catherinebreen/Documents/Chapter 1/other_snowpoles/CUB-L-02')
-    parser.add_argument('--savedir', help='Path to save csv', default = '/Users/catherinebreen/Documents/Chapter 1/other_snowpoles') 
+    parser.add_argument('--filepath', help='Path to image dir', default = '/Users/catherinebreen/Documents/Chapter1/other_snowpoles/CUB-L-02')
+    parser.add_argument('--savedir', help='Path to save csv', default = '/Users/catherinebreen/Documents/Chapter1/other_snowpoles') 
     args = parser.parse_args()
         
-    dir = glob.glob(f"{args.filepath}/*") ## path to 
+    dir = glob.glob(f"{args.filepath}") #/*") ## path to 
     cameraNumber = args.filepath.split('/')[-1] ## get the camera number (could also use folder)
 
     filename = []
@@ -36,13 +37,19 @@ def main():
 
         PixelLength = math.dist(top,bottom)
         PixelLengths.append(PixelLength)
+        
+        ## to get top 10cm conversion
+        print(10/np.average(PixelLengths))
+        ## to get snow free stake length in pixels
+        print(PixelLength)
 
         filename.append(file.split('/')[-1])
         # IPython.embed()
         # creationTime = os.path.getctime(file)
         # dt_c = datetime.datetime.fromtimestamp(creationTime)
         # creationTimes.append(dt_c)
-        
+
+    IPython.embed()    
     df = pd.DataFrame({'filename':filename, 'topX':topX,'topY':topY, 'bottomX':bottomX, 'bottomY':bottomY, 'PixelLengths':PixelLengths })
     df.to_csv(f'{args.savedir}/{cameraNumber}_validation.csv')
 

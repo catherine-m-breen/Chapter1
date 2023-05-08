@@ -54,6 +54,7 @@ def main(
     os.environ["MKL_NUM_THREADS"] = str(np_threads)
     os.environ["VECLIB_MAXIMUM_THREADS"] = str(np_threads)
     os.environ["NUMEXPR_NUM_THREADS"] = str(np_threads)
+    #os.environ["PL_TORCH_DISTRIBUTED_BACKEND"] = 'gloo'
     
     
     #######################
