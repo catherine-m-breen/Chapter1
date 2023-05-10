@@ -18,7 +18,7 @@ from src import algorithms
 from src import datasets
 import IPython
 
-app = typer.Typer(pretty_exceptions_show_locals=False)
+app = typer.Typer()#pretty_exceptions_show_locals=False)
 
 # experiment = Experiment(
 #     api_key="crD0w5pAk59gNUJ88yfNuMo5F",
