@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3.9.0
 import os
 import yaml
 import numpy as np
