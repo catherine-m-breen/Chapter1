@@ -9,7 +9,7 @@ import os
 import json
 import numpy as np
 from PIL import Image
-import cv2
+#import cv2
 import pandas as pd ## Catherine edit
 import IPython ## Catherine edit
 import matplotlib.pyplot as plt ## Catherine edit for testing 
