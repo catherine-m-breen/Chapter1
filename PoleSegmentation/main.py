@@ -4,7 +4,7 @@ import numpy as np
 import typer
 from munch import Munch
 
-import torch
+#import torch
 import comet_ml
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
