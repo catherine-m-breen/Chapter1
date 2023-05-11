@@ -131,7 +131,7 @@ def main(
             #gpus=gpus, # cat edit: comment out if no gpu
             logger=None if evaluate is not None else logger,
             callbacks=[lr_monitor, checkpoint_callback],
-            #strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp', # cat edit: comment out if no gpu
+            strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp', # cat edit: comment out if no gpu
             num_sanity_val_steps=0, ## could make it 2 if you want to check your validation steps
             profiler='simple',
             enable_progress_bar=True,
@@ -145,8 +145,8 @@ def main(
             #gpus=gpus,
             logger=None if evaluate is not None else logger,
             callbacks=[lr_monitor, checkpoint_callback],
-      #
-            #accelerator='gpu',
+            #devices=gpus,
+            accelerator='auto',
             #strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) >= 1 else 'dp',
             num_sanity_val_steps=0,
             profiler='simple',
