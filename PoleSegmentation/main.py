@@ -46,7 +46,7 @@ def main(
     #IPython.embed()
     gpus = gpus #if torch.cuda.is_available() else 'cpu'
     gpus = [int(i) for i in gpus.split(',')] # 'cpu' # cat edit: for gpu
-
+    print(f'gpus:{gpus}')
     #############################
     # Set environment variables #
     #############################
@@ -64,7 +64,7 @@ def main(
     #######################
     with open(config) as f:
         conf = Munch(yaml.load(f, Loader=yaml.FullLoader))
-    if len(gpus) > 1:
+    if len(gpus) >= 1:
         conf.batch_size = 2 # int(conf.batch_size / torch.cuda.device_count())
 
     pl.seed_everything(seed)
@@ -136,7 +136,7 @@ def main(
             enable_progress_bar=True,
         )
     else: 
-        #IPython.embed()
+        IPython.embed()
         trainer = pl.Trainer(
             max_steps=conf.num_iters,
             check_val_every_n_epoch=1, 
