@@ -144,7 +144,7 @@ def main(
             #gpus=gpus,
             logger=None if evaluate is not None else logger,
             callbacks=[lr_monitor, checkpoint_callback],
-            strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp',
+            strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) >= 1 else 'dp',
             num_sanity_val_steps=0,
             profiler='simple',
             enable_progress_bar=True,
