@@ -11,7 +11,7 @@ parallel: 0
 dataset_root: /datadrive/data/ ## update path when get on GPU
 dataset_name: SNOWPOLES
 num_classes: 2 #
-batch_size: 16 # will update with GPU
+batch_size: 4 # will update with GPU
 num_workers: 6 #64
 comet_api: "crD0w5pAk59gNUJ88yfNuMo5F" ## update this if changing to different comet set-up 
 

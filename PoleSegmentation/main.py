@@ -65,7 +65,7 @@ def main(
     with open(config) as f:
         conf = Munch(yaml.load(f, Loader=yaml.FullLoader))
     if len(gpus) >= 1:
-        conf.batch_size = 2 # int(conf.batch_size / torch.cuda.device_count())
+        conf.batch_size = int(conf.batch_size / torch.cuda.device_count()) # could also try 2
 
     pl.seed_everything(seed)
 
@@ -156,7 +156,7 @@ def main(
     if evaluate is not None:
         trainer.validate(learner, datamodule=dataset, ckpt_path=evaluate)
     else:
-        #IPython.embed()
+        #IPython.embed()e
         # print(dataset.dset_tr.__getitem__(4)[1].device)
         # print(dataset.dset_tr.__getitem__(4)[1].dtype)
         # print(dataset.dset_tr.__getitem__(4)[1].shape)
