@@ -6,8 +6,9 @@ import numpy as np
 import typer
 from munch import Munch
 
+import comet_ml ## python says it wants comet before torch
 import torch
-import comet_ml
+
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
 from pytorch_lightning.loggers import CSVLogger, CometLogger, TensorBoardLogger
@@ -165,7 +166,7 @@ def main(
         # print('device of model', next(learner.parameters()).device)
         # print('device of model', next(learner.parameters()).dtype)
         #IPython.embed()
-        trainer.fit(learner, train_dataloader=dataset.dset_tr, val_dataloader=dataset.dset_te) #datamodule=dataset)
+        trainer.fit(learner, datamodule=dataset) #train_dataloader=dataset.dset_tr, val_dataloader=dataset.dset_te) #datamodule=dataset)
 
 if __name__ == '__main__':
     app()
