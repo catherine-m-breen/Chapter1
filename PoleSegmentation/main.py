@@ -29,7 +29,7 @@ app = typer.Typer()#pretty_exceptions_show_locals=False)
 
 @app.command()
 def main(
-         config:str='./configs/snowpole_plain_030923.yaml',
+         config:str='./configs/snowpole_plain_033123.yaml',
          project:str='SNOWPOLES_TEST',  
          gpus:str='0', 
          logger_type:str='tensorboard',
