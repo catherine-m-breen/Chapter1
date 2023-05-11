@@ -6,13 +6,13 @@ import numpy as np
 import typer
 from munch import Munch
 
-#import torch
+import torch
 import comet_ml
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
 from pytorch_lightning.loggers import CSVLogger, CometLogger, TensorBoardLogger
 from pytorch_lightning.strategies.ddp import DDPStrategy
-import torch ## cat edit, they want this loaded after 
+#import torch ## cat edit, they want this loaded after 
 
 from src import algorithms
 from src import datasets
@@ -144,7 +144,7 @@ def main(
             #gpus=gpus,
             logger=None if evaluate is not None else logger,
             callbacks=[lr_monitor, checkpoint_callback],
-            devices=gpus,
+      #
             #accelerator='gpu',
             #strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) >= 1 else 'dp',
             num_sanity_val_steps=0,

@@ -111,6 +111,8 @@ class SNOWPOLE_DS(Dataset):
     def __len__(self):
         return len(self.images)
 
+torch_version = "2.0.1"
+
 class SNOWPOLES(pl.LightningDataModule):
     def __init__(self, conf):
         self.conf = conf
