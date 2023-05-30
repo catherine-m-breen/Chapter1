@@ -166,7 +166,7 @@ def main(
         # print('device of model', next(learner.parameters()).device)
         # print('device of model', next(learner.parameters()).dtype)
         #IPython.embed()
-        trainer.fit(learner, train_dataloader=dataset.dset_tr, val_dataloader=dataset.dset_te) #datamodule=dataset)
+        trainer.fit(learner, datamodule=dataset) #train_dataloader=dataset.dset_tr, val_dataloader=dataset.dset_te) #datamodule=dataset)
 
 if __name__ == '__main__':
     app()
