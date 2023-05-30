@@ -154,4 +154,4 @@ class SNOWPOLES(pl.LightningDataModule):
         )
 
     def allow_zero_length_dataloader_with_multiple_devices(self):
-        return self
+        return DataLoader()

@@ -137,7 +137,7 @@ def main(
             enable_progress_bar=True,
         )
     else: 
-        IPython.embed() ## make sure you have the right pytorch version 
+        #IPython.embed() ## make sure you have the right pytorch version 
         trainer = pl.Trainer(
             max_steps=conf.num_iters,
             check_val_every_n_epoch=1, 
