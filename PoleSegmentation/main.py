@@ -57,9 +57,9 @@ def main(
     os.environ["MKL_NUM_THREADS"] = str(np_threads)
     os.environ["VECLIB_MAXIMUM_THREADS"] = str(np_threads)
     os.environ["NUMEXPR_NUM_THREADS"] = str(np_threads)
-    os.environ["PL_TORCH_DISTRIBUTED_BACKEND"] = 'gloo'
+    #os.environ["PL_TORCH_DISTRIBUTED_BACKEND"] = 'gloo'
     
-    
+
     #######################
     # Load configurations #
     #######################
@@ -79,8 +79,6 @@ def main(
     dataset = datasets.__dict__[conf.dataset_name](conf=conf)
     learner = algorithms.__dict__[conf.algorithm](conf=conf)
 
-    #IPython.embed()
-    #input, output = datasets.dset_te.__getitem__(4)
     print('training size:', dataset.dset_tr.__len__())
     print('testing size:', dataset.dset_te.__len__())
     ###############
