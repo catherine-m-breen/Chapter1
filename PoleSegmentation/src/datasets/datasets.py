@@ -136,6 +136,7 @@ class SNOWPOLES(pl.LightningDataModule):
         print("Done.")
 
     def train_dataloader(self):
+        IPython.embed()
         return DataLoader(
             self.dset_tr, batch_size=self.conf.batch_size, shuffle=True, 
             pin_memory=True, num_workers=self.conf.num_workers, drop_last=True, persistent_workers=True
@@ -153,5 +154,5 @@ class SNOWPOLES(pl.LightningDataModule):
             pin_memory=True, num_workers=self.conf.num_workers, drop_last=True, persistent_workers=True
         )
 
-    def allow_zero_length_dataloader_with_multiple_devices(self):
-        return DataLoader()
+    # def allow_zero_length_dataloader_with_multiple_devices(self):
+    #     return DataLoader()

@@ -138,20 +138,36 @@ def main(
         )
     else: 
         #IPython.embed() ## make sure you have the right pytorch version 
+    #     trainer = pl.Trainer(
+    #         max_steps=conf.num_iters,
+    #         check_val_every_n_epoch=1, 
+    #         log_every_n_steps = conf.log_interval, 
+    #         #gpus=gpus,
+    #         logger=None if evaluate is not None else logger,
+    #         callbacks=[lr_monitor, checkpoint_callback],
+    #         #devices=gpus,
+    #         accelerator='auto',
+    #         #strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) >= 1 else 'dp',
+    #         num_sanity_val_steps=0,
+    #         profiler='simple',
+    #         enable_progress_bar=True,
+    #         fast_dev_run=True,
+    # )
         trainer = pl.Trainer(
             max_steps=conf.num_iters,
-            check_val_every_n_epoch=1, 
+            check_val_every_n_epoch=2, 
             log_every_n_steps = conf.log_interval, 
-            #gpus=gpus,
             logger=None if evaluate is not None else logger,
             callbacks=[lr_monitor, checkpoint_callback],
-            #devices=gpus,
-            accelerator='auto',
-            #strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) >= 1 else 'dp',
+            devices=1,
+            accelerator='gpu',
+            strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) >= 1 else 'dp',
             num_sanity_val_steps=0,
             profiler='simple',
             enable_progress_bar=True,
+            #fast_dev_run=True,
     )
+
 
     #######
     # RUN #
@@ -166,7 +182,8 @@ def main(
         # print('device of model', next(learner.parameters()).device)
         # print('device of model', next(learner.parameters()).dtype)
         IPython.embed()
-        trainer.fit(learner, datamodule=dataset) #train_dataloader=dataset.dset_tr, val_dataloader=dataset.dset_te) #datamodule=dataset)
+        #trainer.fit(learner, datamodule=dataset) #train_dataloader=dataset.dset_tr, val_dataloader=dataset.dset_te) #datamodule=dataset)
+        trainer.fit(learner, dataset.dset_tr, dataset.dset_te) #datamodule=dataset))
 
 if __name__ == '__main__':
     app()
