@@ -153,5 +153,5 @@ class SNOWPOLES(pl.LightningDataModule):
             pin_memory=True, num_workers=self.conf.num_workers, drop_last=True, persistent_workers=True
         )
 
-    def allow_zero_length_dataloader_with_multiple_devices(self):
-        return DataLoader()
+    # def allow_zero_length_dataloader_with_multiple_devices(self):
+    #     return DataLoader()
