@@ -127,16 +127,15 @@ class SNOWPOLES(pl.LightningDataModule):
         #IPython.embed()
         self.dset_te = SNOWPOLE_DS(rootdir=self.conf.dataset_root,
                               dset='val',
-                              transforms=data_transforms['train'] )
+                              transforms=data_transforms['val'] )
 
         self.dset_te = SNOWPOLE_DS(rootdir=self.conf.dataset_root,
                               dset='val',
-                              transforms=data_transforms['train'])
+                              transforms=data_transforms['val'])
 
         print("Done.")
 
     def train_dataloader(self):
-        IPython.embed()
         return DataLoader(
             self.dset_tr, batch_size=self.conf.batch_size, shuffle=True, 
             pin_memory=True, num_workers=self.conf.num_workers, drop_last=True, persistent_workers=True
