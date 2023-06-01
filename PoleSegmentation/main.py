@@ -65,8 +65,11 @@ def main(
     #######################
     with open(config) as f:
         conf = Munch(yaml.load(f, Loader=yaml.FullLoader))
-    if len(gpus) >= 1:
-        conf.batch_size = int(conf.batch_size / torch.cuda.device_count()) # could also try 2
+
+    if gpus != [-1]:
+        if len(gpus) >= 1:
+            conf.batch_size = int(conf.batch_size / torch.cuda.device_count()) # could also try 2
+    else: conf.batch_size = conf.batch_size
 
     pl.seed_everything(seed)
 
@@ -122,7 +125,7 @@ def main(
     #################
     # Setup trainer #
     #################
-    if gpus == 'cpu':
+    if gpus == [-1]: ## notation for cpu
         trainer = pl.Trainer(
             max_steps=conf.num_iters,
             check_val_every_n_epoch=1, 
@@ -131,7 +134,7 @@ def main(
             #gpus=gpus, # cat edit: comment out if no gpu
             logger=None if evaluate is not None else logger,
             callbacks=[lr_monitor, checkpoint_callback],
-            strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp', # cat edit: comment out if no gpu
+            # strategy=DDPStrategy(find_unused_parameters=True) if len(gpus) > 1 else 'dp', # cat edit: comment out if no gpu
             num_sanity_val_steps=0, ## could make it 2 if you want to check your validation steps
             profiler='simple',
             enable_progress_bar=True,

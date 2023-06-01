@@ -141,15 +141,15 @@ class SNOWPOLES(pl.LightningDataModule):
             pin_memory=True, num_workers=self.conf.num_workers, drop_last=True, persistent_workers=True
         )
 
-    def val_dataloader(self):
+    def val_dataloader(self): ##### cat edit: just make it all train for now
         return DataLoader(
-            self.dset_te, batch_size=self.conf.batch_size, shuffle=False, 
+            self.dset_tr, batch_size=self.conf.batch_size, shuffle=False, 
             pin_memory=True, num_workers=self.conf.num_workers, drop_last=True, persistent_workers=True
         )
 
     def test_dataloader(self):
         return DataLoader(
-            self.dset_te, batch_size=self.conf.batch_size, shuffle=False, 
+            self.dset_tr, batch_size=self.conf.batch_size, shuffle=False, 
             pin_memory=True, num_workers=self.conf.num_workers, drop_last=True, persistent_workers=True
         )
 
