@@ -1,3 +1,12 @@
+'''
+Cat Updates:
+- adjusted outputs and inputs to both be floats
+- Updated to track MeanIoU, because in utils.py it created a dictionary to track it
+- in validation step, added a line to get the right dimension of the labels, not just predicted values. 
+    Selected the positive axis (should make sure it shouldnt be 0). 
+
+'''
+
 import time
 import os
 import numpy as np

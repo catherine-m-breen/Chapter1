@@ -1,3 +1,12 @@
+'''
+Cat updates:
+- dataset root
+- dataset name
+- comet_api
+- num_classses
+- num_workers
+- batch_size 
+'''
 # training
 conf_id: snowpole_plain_030923
 algorithm: Plain

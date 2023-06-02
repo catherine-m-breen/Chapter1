@@ -1,5 +1,15 @@
 #!/miniconda/bin/python3.8 
 
+'''
+Cat Updates
+- Added path to create weights folder
+- created two separate trainers (one for cpu and one for gpu)
+- defined cpu when gpu is = -1
+- switched order of imports for comet_ml and torch 
+
+'''
+
+
 import os
 import yaml
 import numpy as np
@@ -27,7 +37,6 @@ app = typer.Typer()#pretty_exceptions_show_locals=False)
 #     workspace="catherine-m-breen",
 # )
 
-
 @app.command()
 def main(
          config:str='./configs/snowpole_plain_033123.yaml',
@@ -47,7 +56,7 @@ def main(
     #IPython.embed()
     gpus = gpus #if torch.cuda.is_available() else 'cpu'
     gpus = [int(i) for i in gpus.split(',')] # 'cpu' # cat edit: for gpu
-    print(f'gpus:{gpus}')
+  
     #############################
     # Set environment variables #
     #############################
@@ -81,6 +90,7 @@ def main(
 
     print('training size:', dataset.dset_tr.__len__())
     print('testing size:', dataset.dset_te.__len__())
+    
     ###############
     # Load logger #
     ###############
@@ -182,7 +192,6 @@ def main(
         # print(dataset.dset_tr.__getitem__(4)[1].shape)
         # print('device of model', next(learner.parameters()).device)
         # print('device of model', next(learner.parameters()).dtype)
-        IPython.embed()
         trainer.fit(learner, datamodule=dataset) #train_dataloader=dataset.dset_tr, val_dataloader=dataset.dset_te) #datamodule=dataset)
         #trainer.fit(learner, dataset.dset_tr, dataset.dset_te) #datamodule=dataset))
 

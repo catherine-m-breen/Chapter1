@@ -2,6 +2,11 @@
 Catherine Updates: 
 - updated snowpole class
 - converted datatypes for cpu: https://pytorch.org/docs/stable/tensors.html
+- Converted labels from 1 dim of 0 and 1s by, to 2 dim stack with inverted masks (no snow layer, and snow layer) 
+- Divided by 255
+- Changed the labels.long to labels.to(tensor.float32) because the loss function expected 
+the actual and predicted values to match. 
+
 '''
 
 

@@ -23,14 +23,12 @@ This model identifies snow depth from snow poles by classifying each pixel in th
 
 on local machine: 
 ```
-python main.py --config ./configs/snowpole_plain_032623.yaml --gpus 0 --logger-type comet --session 0
-or 
-python main.py --config ./configs/snowpole_plain_032623.yaml --gpus -1 --logger-type comet --session 0   
+python main.py --config ./configs/snowpole_plain_030923.yaml --gpus -1 --logger-type comet --session 0   
 ```
 
-on GPU: 
+on single GPU: 
 ```
-python main.py --config ./configs/snowpole_plain_030923.yaml --gpus 0,1,2,3 --logger_type comet --session 0 
+python main.py --config ./configs/snowpole_plain_030923.yaml --gpus 0 --logger_type comet --session 0 
 ```
 Once the model is trained, a weight file will be saved to `weights` folder.
 
@@ -52,3 +50,4 @@ python main.py --config ./configs/voc_plain_051522.yaml --gpus 0 --evaluate path
 
 ## other resources
 Breen, C. M., C. Hiemstra, C. M. Vuyovich, and M. Mason. (2022). SnowEx20 Grand Mesa Snow Depth from Snow Pole Time-Lapse Imagery, Version 1 [Data Set]. Boulder, Colorado USA. NASA National Snow and Ice Data Center Distributed Active Archive Center. https://doi.org/10.5067/14EU7OLF051V. Date Accessed 04-13-2023.
+
